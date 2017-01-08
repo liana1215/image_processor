@@ -1,0 +1,351 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a server that stores images, and returns processed images\
+    \ on demand."
+  version: "1.0.0"
+  title: "Processed Images on Demand"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "tasuku@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/liana1215/image-storage/1.0.0"
+tags:
+- name: "image"
+  description: "Image for processing"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more."
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /images:
+    get:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.images_get"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Image"
+    post:
+      tags:
+      - "image"
+      summary: "Add a new image to the image bank"
+      operationId: "controllers.image_controller.add_image"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Image object that needs to be added to the image bank"
+        required: true
+        schema:
+          $ref: "#/definitions/Image"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - imagebank_auth:
+        - "write:images"
+        - "read:images"
+      x-tags:
+      - tag: "image"
+  /images/count:
+    get:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.get_image_count"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "number"
+  /images/id/processes/blur:
+    get:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.images_id_processes_blur_get"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Image"
+    post:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.blur_image"
+      parameters: []
+      responses:
+        200:
+          description: "Successful operation"
+  /images/id/processes/gray:
+    get:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.images_id_processes_gray_get"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Image"
+    post:
+      tags:
+      - "default"
+      operationId: "controllers.default_controller.gray_image"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+  /images/{imageId}:
+    get:
+      tags:
+      - "image"
+      summary: "Find images by ID"
+      description: "Returns images related to the specified id"
+      operationId: "controllers.image_controller.get_images_by_id"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "imageId"
+        in: "path"
+        description: "ID of image to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Image"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Image not found"
+      security:
+      - api_key: []
+      x-tags:
+      - tag: "image"
+    delete:
+      tags:
+      - "image"
+      summary: "Deletes all images associated with id"
+      description: ""
+      operationId: "controllers.image_controller.delete_images"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "imageId"
+        in: "path"
+        description: "Image id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Image not found"
+      security:
+      - imagebank_auth:
+        - "write:images"
+        - "read:images"
+      x-tags:
+      - tag: "image"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "controllers.user_controller.create_user"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-tags:
+      - tag: "user"
+  /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "controllers.user_controller.login_user"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+      x-tags:
+      - tag: "user"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "controllers.user_controller.logout_user"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+      x-tags:
+      - tag: "user"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+  imagebank_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:images: "modify images in your account"
+      read:images: "read your images"
+definitions:
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Category"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      userStatus:
+        type: "integer"
+        format: "int32"
+        description: "User Status"
+    xml:
+      name: "User"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Tag"
+  Image:
+    type: "object"
+    required:
+    - "name"
+    - "photoUrls"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: "string"
+        example: "name"
+      photoUrls:
+        type: "array"
+        xml:
+          name: "photoUrl"
+          wrapped: true
+        items:
+          type: "string"
+      tags:
+        type: "array"
+        xml:
+          name: "tag"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: "string"
+        description: "image status"
+        enum:
+        - "original"
+    xml:
+      name: "Image"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
