@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tasuku/workspace/project/image-processor/workspace/blur_image.cpp
+iostream
+-
+vector
+-
+opencv2/imgproc/imgproc.hpp
+/home/tasuku/workspace/project/image-processor/workspace/opencv2/imgproc/imgproc.hpp
+opencv2/highgui.hpp
+/home/tasuku/workspace/project/image-processor/workspace/opencv2/highgui.hpp
+
