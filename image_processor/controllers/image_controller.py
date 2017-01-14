@@ -4,7 +4,7 @@ import models as dbH
 
 IMG_BANK_PATH = '/workspace/project/image-processor/image-processor/image_bank/'
 
-def add_image(f=None) -> int:
+def add_image(f=None) -> str:
     """Adds image id to database, stores image to path
     and returns image id. 
     """    
