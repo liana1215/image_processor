@@ -16,7 +16,8 @@ def add_image(f=None) -> str:
     return str(id)
 
 def delete_images(imageId, apiKey = None) -> str:
-    return 'do some magic!'
+    dbH.delete_image(imageId)
+    return 'Image {} deleted!'.format(imageId)
 
-def get_images_by_id(imageId) -> str:
+def get_image_by_id(imageId) -> str:
     return 'do some magic!'
