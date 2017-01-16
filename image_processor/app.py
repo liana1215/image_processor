@@ -10,6 +10,7 @@ import models as dbH
 configdb = "imagebank.db"
 configschema = "schema.sql"
 IMG_BANK_PATH = '/workspace/project/image-processor/image-processor/image_bank/'
+
 def create_app(schema_uri, database_uri, debug=False):
     app = Flask(__name__)
     

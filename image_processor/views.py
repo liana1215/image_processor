@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3
-
 import os
 
 from flask import Flask, Blueprint, g, request, flash
@@ -16,7 +15,6 @@ def images():
             print('No file')
         else:
             ret_id = imgc.add_image(request.files['file'])
-                
 
         ret_id = imgc.add_image() # this will be removed, just for prototyping
         return ret_id
