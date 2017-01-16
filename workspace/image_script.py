@@ -9,7 +9,7 @@ if __name__=="__main__":
     imgs = glob.glob("{}/*.png".format(os.path.join(configpath,file_dir)))
     for i,img in enumerate(imgs):
         try:
-            call(["./BlurImage", img, "{}.png".format(i)])
+            call(["./ImageProcess", img, "{}.png".format(i)])
         except IOError:
             print("Call process failed.")
 
