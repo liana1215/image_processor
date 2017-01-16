@@ -23,7 +23,6 @@ private:
     cv::Mat dst;
     std::string img_name;
     std::vector<int> compression_params;
-
 };
 
 
@@ -35,7 +34,8 @@ ImageProcessor::ImageProcessor(const int sz, const double sdev, const std::strin
 }
 
 
-void ImageProcessor::gaussianBlur(cv::Mat src) 
+void 
+ImageProcessor::gaussianBlur(cv::Mat src) 
 {   
     int sz = this->fsize;
     double sd = this->sdev;
@@ -45,7 +45,8 @@ void ImageProcessor::gaussianBlur(cv::Mat src)
 }
 
 
-void ImageProcessor::saveImageToDisk(void)
+void 
+ImageProcessor::saveImageToDisk(void)
 {
     this->compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
     this->compression_params.push_back(9);
