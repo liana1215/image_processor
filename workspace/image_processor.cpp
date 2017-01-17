@@ -6,9 +6,6 @@
 
 class ImageProcessor
 {
-    int fsize;
-    double sdev;
-
 public:
     ImageProcessor(const int, const double, const std::string);
     ~ImageProcessor()=default;
@@ -23,6 +20,8 @@ private:
     cv::Mat dst;
     std::string img_name;
     std::vector<int> compression_params;
+    int fsize;
+    double sdev;
 };
 
 
