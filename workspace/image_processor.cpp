@@ -14,12 +14,12 @@ public:
     ~ImageProcessor()=default;
 
     void gaussianBlur(cv::Mat);
+    void sharpen(cv::Mat);
 
 private:
     void saveImageToDisk();
     
 private:
-    cv::Mat temp;
     cv::Mat dst;
     std::string img_name;
     std::vector<int> compression_params;
@@ -41,6 +41,19 @@ ImageProcessor::gaussianBlur(cv::Mat src)
     double sd = this->sdev;
 
     cv::GaussianBlur(src, this->dst, cv::Size(sz, sz), sd, sd);
+    this->saveImageToDisk();
+}
+
+
+void 
+ImageProcessor::sharpen(cv::Mat src)
+{
+    int sz = this->fsize;
+    double sd = this->sdev;
+    cv::Mat tmp;
+
+    cv::GaussianBlur(src, tmp, cv::Size(sz, sz), sd, sd);
+    cv::addWeighted(src, 1.5, tmp, -0.5, 0, this->dst);
     this->saveImageToDisk();
 }
 
