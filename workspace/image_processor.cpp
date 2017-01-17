@@ -6,12 +6,12 @@
 
 class ImageProcessor
 {
+    int fsize;
+    double sdev;
+
 public:
     ImageProcessor(const int, const double, const std::string);
     ~ImageProcessor()=default;
-
-    int fsize;
-    double sdev;
 
     void gaussianBlur(cv::Mat);
 
