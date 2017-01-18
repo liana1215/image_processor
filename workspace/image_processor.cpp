@@ -7,7 +7,7 @@
 class ImageProcessor
 {
 public:
-    ImageProcessor(const int, const double, const std::string);
+    ImageProcessor(int, double, std::string);
     ~ImageProcessor()=default;
 
     void gaussianBlur(cv::Mat);
@@ -25,16 +25,14 @@ private:
 };
 
 
-ImageProcessor::ImageProcessor(const int sz, const double sdev, const std::string name)
-{
-    this->fsize = sz;       //set filter size
-    this->sdev = sdev;      //set standard deviation x,y axis
-    this->img_name = name;  //define output name
-}
+ImageProcessor::ImageProcessor(int sz = 3, double sd = 0.0 , std::string name = "0")
+    : fsize{sz}, sdev{sd}, img_name{name} {}
 
 
 void 
 ImageProcessor::gaussianBlur(cv::Mat src) 
+    //Blurs image by applying a gaussian filter with a default filter 
+    //size of 31. The blurred image is named and saved to file.
 {   
     int sz = this->fsize;
     double sd = this->sdev;
