@@ -20,13 +20,13 @@ private:
     cv::Mat dst;
     std::string img_name;
     std::vector<int> compression_params;
-    int fsize;
-    double sdev;
+    int fsz;    //filter size
+    double fsd; //filter std deviation
 };
 
 
 ImageProcessor::ImageProcessor(int sz = 3, double sd = 0.0 , std::string name = "0")
-    : fsize{sz}, sdev{sd}, img_name{name} {}
+    : fsz{sz}, fsd{sd}, img_name{name} {}
 
 
 void 
@@ -34,36 +34,31 @@ ImageProcessor::gaussianBlur(cv::Mat src)
     //Blurs image by applying a gaussian filter with a default filter 
     //size of 31. The blurred image is named and saved to file.
 {   
-    int sz = this->fsize;
-    double sd = this->sdev;
-
-    cv::GaussianBlur(src, this->dst, cv::Size(sz, sz), sd, sd);
-    this->saveImageToDisk();
+    cv::GaussianBlur(src, dst, cv::Size(fsz, fsz), fsd, fsd);
+    saveImageToDisk();
 }
 
 
 void 
 ImageProcessor::sharpen(cv::Mat src)
 {
-    int sz = this->fsize;
-    double sd = this->sdev;
     cv::Mat tmp;
 
-    cv::GaussianBlur(src, tmp, cv::Size(sz, sz), sd, sd);
-    cv::addWeighted(src, 1.5, tmp, -0.5, 0, this->dst);
-    this->saveImageToDisk();
+    cv::GaussianBlur(src, tmp, cv::Size(fsz, fsz), fsd, fsd);
+    cv::addWeighted(src, 1.5, tmp, -0.5, 0, dst);
+    saveImageToDisk();
 }
 
 
 void 
 ImageProcessor::saveImageToDisk(void)
 {
-    this->compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-    this->compression_params.push_back(9);
+    compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+    compression_params.push_back(9);
 
     try 
     {
-        cv::imwrite(this->img_name, this->dst, this->compression_params);
+        cv::imwrite(img_name, dst, compression_params);
     }
     catch (std::exception &ex) 
     {
