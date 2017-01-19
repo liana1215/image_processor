@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project( ImageProcess )
 find_package( OpenCV REQUIRED )
-add_executable( ImageProcess image_processor.cpp )
+add_executable( ImageProcess image_processor.cpp ImageProcessor.cpp)
 target_link_libraries( ImageProcess ${OpenCV_LIBS} )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
