@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+
 import {
+    ListView,
     View,
     Text,
     TextInput,
@@ -9,6 +11,38 @@ import {
 } from 'react-native';
 
 import Style from './Style';
+import Row from './components/Row'
+
+{/*https://github.com/andersr/react-native-list-view-demo/blob/master/index.ios.js*/}
+{/*https://medium.com/differential/react-native-basics-how-to-use-the-listview-component-a0ec44cf1fe8#.p9xz313nn*/}
+
+
+
+class ListViewImage extends Component {
+    constructor(props) {
+        super(props);
+
+        const ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        });
+
+        {/* const { dataBlob, rowIds } = this.getImages(); 
+            define a function that collects all the data. */}
+
+        this.state = {
+            dataSource: ds.cloneWithRows(['row 1', 'row 2', 'row 3', 'row 4']),
+        };
+    }
+    render() {
+        return (
+        <ListView
+            style={Style.container}
+            dataSource={this.state.dataSource}
+            renderRow={(data) => <Row {...data} />}
+        />
+        );
+    } 
+}
 
 
 class ImageProcessor extends Component {
@@ -59,5 +93,5 @@ class ImageProcessor extends Component {
     }
 }
             
-AppRegistry.registerComponent('ImageProcessor',() => ImageProcessor);
+AppRegistry.registerComponent('ImageProcessor',() => ListViewImage);
    
